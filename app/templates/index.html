@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+        <!-- {% if user %}
+        <h1>Hello, {{ user.username }}!</h1>
+        {% else %}
+        <h1>Hello, anonymous!</h1>
+        {% endif %}  -->
+        <h1>My film catalogue</h1>
+
+        <h3>Type a film title to search</h3>
+
+        <form action="/index" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <p>
+                {{ form.title.label }}<br>
+                {{ form.title(size=100) }}<br>
+                {% for error in form.title.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </p>
+            <p>{{ form.submit() }}</p>
+        </form>
+       
+
+         <!--<p>Available films:</p>
+        {% for film in films %}
+        <div><p>{{film.title}}</p><p>{{film.author}}</p></div>
+        {% endfor %}-->
+        <div><p>Query result: </p></div>
+        {% if film %}
+            <div><p>{{film}}</p></div>
+        {% else %}
+        <!--per ora questo div appare sia se devo ancora fare la ricerca
+        sia se il film non è stato trovato nel db-->
+            <div><p>no film selected</p></div>
+        {% endif %}
+{% endblock %}

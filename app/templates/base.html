@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - My film catalogue</title>
+      {% else %}
+      <title>Welcome to the film catalogue</title>
+      {% endif %}
+    </head>
+    <body>
+        <div>Catalogue: <a href="{{ url_for('index')}}">New search</a></div>
+        <hr>
+
+        
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
