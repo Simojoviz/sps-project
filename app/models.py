@@ -1,20 +1,12 @@
+import json
+
 from app import db
-
-class TitleCrew(db.Model):
-    tconst = db.Column(db.String(500), primary_key=True)
-    directors = db.Column(db.String(50000))
-    writers = db.Column(db.String(50000))
-
-    def __repr__(self):
-        return '<TitleCrew {}>'.format(self.username)
-    
-
 
 # per ora non importato
 class TitleAkas(db.Model):
     
     titleId = db.Column(db.String(500), primary_key=True)
-    ordering = db.Column(db.Integer )
+    ordering = db.Column(db.Integer , primary_key=True)
     title = db.Column(db.String(500))
     region = db.Column(db.String(500))
     language = db.Column(db.String(500))
@@ -23,7 +15,17 @@ class TitleAkas(db.Model):
     isOriginalTitle = db.Column(db.Boolean)
 
     def __repr__(self):
-        return '<TitleAkas {}>'.format(self.username)
+        obj = {
+            "titleId" : self.titleId, 
+            "ordering" : self.ordering,
+            "title" : self.title,
+            "region" : self.region,
+            "language" : self.language,
+            "types" : self.types,
+            "attributes" : self.attributes,
+            "isOriginalTitle" : self.isOriginalTitle
+        }
+        return 'TitleAkas {}'.format(obj)
     
 
 class TitleBasics(db.Model):
@@ -39,13 +41,31 @@ class TitleBasics(db.Model):
 
    
     def __repr__(self):
-        return '<TitleBasics {}>'.format(self.primaryTitle)
+        obj = {
+            "tconst" : self.tconst,
+            "titleType" : self.titleType,
+            "primaryTitle" : self.primaryTitle,
+            "originalTitle" : self.originalTitle,
+            "isAdult" : self.isAdult,
+            "startYear" : self.startYear,
+            "endYear" : self.endYear,
+            "runtimeMinutes" : self.runtimeMinutes,
+            "genres" : self.genres
+        }
+        return 'TitleBasics {}'.format(obj)
 
+class TitleCrew(db.Model):
+    tconst = db.Column(db.String(500), primary_key=True)
+    directors = db.Column(db.String(50000))
+    writers = db.Column(db.String(50000))
 
-def getFilmByTitle(title):
-    films = TitleBasics.query.filter_by(primaryTitle = title).first()
-    print("query eseguita")
-    return films
+    def __repr__(self):
+        obj = {
+            "tconst" :  self.tconst,
+            "directors" :  self.directors,
+            "writers" :  self.writers
+        }
+        return 'TitleCrew {}'.format(obj)
 
 
 class TitleEpisode(db.Model):
@@ -56,6 +76,17 @@ class TitleEpisode(db.Model):
     
     def __repr__(self):
         return '<TitleEpisode {}>'.format(self.tconst)
+    
+class TitlePrincipals(db.Model):
+    tconst = db.Column(db.String(200), primary_key=True)
+    ordering = db.Column(db.Integer)
+    nconst = db.Column(db.String(200))
+    category = db.Column(db.String(200))
+    job = db.Column(db.String(200))
+    characters = db.Column(db.String(200))
+
+    def __repr__(self):
+        return '<TitlePrincipals {}>'.format(self.tconst)
     
 
 class TitleRatings(db.Model):
@@ -81,3 +112,14 @@ class NameBasics(db.Model):
     def __repr__(self):
         return '<NameBasics {}>'.format(self.primaryName)
     
+def getFilmByTitle(title):
+    film = TitleBasics.query.filter_by(primaryTitle=title).first()
+    return film
+
+def getAkasByFilmId(tconst):
+    aka = TitleAkas.query.filter_by(titleId=tconst).all()
+    return aka
+
+def getCrewByFilmId(tconst):
+    crew = TitleCrew.query.filter_by(tconst=tconst).first()
+    return crew
