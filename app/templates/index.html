@@ -17,17 +17,4 @@
             <p>{{ form.submit() }}</p>
         </form>
        
-
-         <!--<p>Available films:</p>
-        {% for film in films %}
-        <div><p>{{film.title}}</p><p>{{film.author}}</p></div>
-        {% endfor %}-->
-        <div><p>Query result: </p></div>
-        {% if film %}
-            <div><p>{{film}}</p></div>
-        {% else %}
-        <!--per ora questo div appare sia se devo ancora fare la ricerca
-        sia se il film non è stato trovato nel db-->
-            <div><p>no film selected</p></div>
-        {% endif %}
 {% endblock %}

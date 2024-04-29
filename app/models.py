@@ -1,8 +1,5 @@
-import json
-
 from app import db
 
-# per ora non importato
 class TitleAkas(db.Model):
     
     titleId = db.Column(db.String(500), primary_key=True)
@@ -79,7 +76,7 @@ class TitleEpisode(db.Model):
     
 class TitlePrincipals(db.Model):
     tconst = db.Column(db.String(200), primary_key=True)
-    ordering = db.Column(db.Integer)
+    ordering = db.Column(db.Integer, primary_key=True)
     nconst = db.Column(db.String(200))
     category = db.Column(db.String(200))
     job = db.Column(db.String(200))
@@ -110,11 +107,23 @@ class NameBasics(db.Model):
     
     
     def __repr__(self):
-        return '<NameBasics {}>'.format(self.primaryName)
+        obj = {
+            "nconst" :  self.nconst,
+            "primaryName" :  self.primaryName,
+            "birthYear" :  self.birthYear,
+            "deathYear" :  self.deathYear,
+            "primaryProfession" :  self.primaryProfession,
+            "knownForTitles" :  self.knownForTitles
+        }
+        return 'NameBasics {}'.format(obj)
     
 def getFilmByTitle(title):
-    film = TitleBasics.query.filter_by(primaryTitle=title).first()
-    return film
+    filmAkas = TitleAkas.query.filter_by(title=title).first()
+    if filmAkas is not None:
+        film = TitleBasics.query.filter_by(tconst=filmAkas.titleId).first()
+        return film
+    else:
+        return None
 
 def getAkasByFilmId(tconst):
     aka = TitleAkas.query.filter_by(titleId=tconst).all()
@@ -123,3 +132,12 @@ def getAkasByFilmId(tconst):
 def getCrewByFilmId(tconst):
     crew = TitleCrew.query.filter_by(tconst=tconst).first()
     return crew
+
+def getPrincipalsByFilmId(tconst):
+    principals = TitlePrincipals.query.filter_by(tconst=tconst).all()
+    return principals
+
+def getPersonById(nconst):
+    person = NameBasics.query.filter_by(nconst=nconst).first()
+    return person
+

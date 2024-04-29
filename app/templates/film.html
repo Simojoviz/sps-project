@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ film.primaryTitle }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        strong {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>{{ film.primaryTitle }}</h1>
+        <p><strong>Directors:</strong>
+            <ul>
+                {% for director in directors %}
+                    <li>{{ director }}</li>
+                {% endfor %}
+            </ul>
+        </p>
+        <p><strong>Writers:</strong>
+            <ul>
+                {% for writer in writers %}
+                    <li>{{ writer }}</li>
+                {% endfor %}
+            </ul>
+        </p>
+        <p><strong>Actors:</strong>
+            <ul>
+                {% for actor in actors %}
+                    <li>{{ actor }}</li>
+                {% endfor %}
+            </ul>
+        </p>
+        <p><strong>Average Rating:</strong> {{ average_rating }}</p>
+    </div>
+</body>
+</html>
