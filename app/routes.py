@@ -20,18 +20,29 @@ def film_page(_title):
     film = getFilmByTitle(_title)
     if film is None:
         return "No film found"
-     
+    
+    rating = getFilmRating(film.tconst)
+    average_rating = rating.averageRating if rating is not None else None
     crew = getCrewByFilmId(film.tconst)
     directors = []
     writers = []
     if crew is not None:
-        directors = [getPersonById(d) for d in crew.directors.split(',')]
-        writers = [getPersonById(w) for w in crew.writers.split(',')]
+        directors = filter(lambda x: x is not None, [getPersonById(d) for d in crew.directors.split(',')])
+        writers = filter(lambda x: x is not None, [getPersonById(w) for w in crew.writers.split(',')])
+        print(crew.directors)
 
-    principals = getPrincipalsByFilmId(film.tconst)
-    actors = []
-    if principals is not None:
-        actors = [getPersonById(p.nconst) for p in filter(lambda x: x.category == 'actor' or x.category == 'actress', principals)]
+    actors = getActorsByFilmId(film.tconst)
+   
     return render_template('film.html', film=film, directors=[d.primaryName for d in directors],
                             writers=[w.primaryName for w in writers], 
-                            actors=[a.primaryName for a in actors], average_rating=7)
+                            actors=[a.primaryName for a in actors], average_rating=average_rating)
+
+
+@app.route('/actor/<_name>')
+def actor_page(_name):
+    actor = getPersonByName(_name)
+    if actor is None:
+        return "No actor of actress found"
+
+    films = getFilmsByActor(actor.nconst)
+    return str(films)

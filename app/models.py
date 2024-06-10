@@ -118,12 +118,12 @@ class NameBasics(db.Model):
         return 'NameBasics {}'.format(obj)
     
 def getFilmByTitle(title):
-    filmAkas = TitleAkas.query.filter_by(title=title).first()
-    if filmAkas is not None:
-        film = TitleBasics.query.filter_by(tconst=filmAkas.titleId).first()
-        return film
-    else:
-        return None
+    film = TitleBasics.query.filter_by(primaryTitle=title).first()
+    return film
+
+def getFilmById(tconst):
+    film = TitleBasics.query.filter_by(tconst=tconst).first()
+    return film
 
 def getAkasByFilmId(tconst):
     aka = TitleAkas.query.filter_by(titleId=tconst).all()
@@ -133,11 +133,27 @@ def getCrewByFilmId(tconst):
     crew = TitleCrew.query.filter_by(tconst=tconst).first()
     return crew
 
-def getPrincipalsByFilmId(tconst):
-    principals = TitlePrincipals.query.filter_by(tconst=tconst).all()
-    return principals
+def getFilmRating(tconst):
+    rating = TitleRatings.query.filter_by(tconst=tconst).first()
+    return rating
+
+def getActorsByFilmId(tconst):
+    principals = TitlePrincipals.query.filter((TitlePrincipals.tconst==tconst) 
+                                         & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()
+    actors = set([getPersonById(p.nconst) for p in principals])
+    return actors
 
 def getPersonById(nconst):
     person = NameBasics.query.filter_by(nconst=nconst).first()
     return person
+
+def getPersonByName(name):
+    person = NameBasics.query.filter_by(primaryName=name).first()
+    return person
+
+def getFilmsByActor(nconst):
+    films = set([getFilmById(p.tconst) for p in TitlePrincipals.query.filter((TitlePrincipals.nconst==nconst) 
+                                         & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()])
+    return films
+
 
