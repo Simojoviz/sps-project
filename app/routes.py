@@ -29,7 +29,6 @@ def film_page(_title):
     if crew is not None:
         directors = filter(lambda x: x is not None, [getPersonById(d) for d in crew.directors.split(',')])
         writers = filter(lambda x: x is not None, [getPersonById(w) for w in crew.writers.split(',')])
-        print(crew.directors)
 
     actors = getActorsByFilmId(film.tconst)
    
@@ -45,4 +44,5 @@ def actor_page(_name):
         return "No actor of actress found"
 
     films = getFilmsByActor(actor.nconst)
-    return str(films)
+
+    return render_template('actor.html', actor=actor, films=films)

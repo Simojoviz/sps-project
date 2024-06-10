@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ film.primaryTitle }}</title>
+    <title>{{ actor.primaryName }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,29 +37,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>{{ film.primaryTitle }}</h1>
-        <p><strong>Directors:</strong>
+        <h1>{{ actor.primaryName }}</h1>
+       
+        <p><strong>Films:</strong>
             <ul>
-                {% for director in directors %}
-                    <li>{{ director }}</li>
+                {% for film in films %}
+                    <li> {{ film.primaryTitle }} </li>
                 {% endfor %}
             </ul>
         </p>
-        <p><strong>Writers:</strong>
-            <ul>
-                {% for writer in writers %}
-                    <li>{{ writer }}</li>
-                {% endfor %}
-            </ul>
-        </p>
-        <p><strong>Actors:</strong>
-            <ul>
-                {% for actor in actors %}
-                    <li> <a href="/actor/{{ actor }}">{{ actor }}</a> </li>
-                {% endfor %}
-            </ul>
-        </p>
-        <p><strong>Average Rating:</strong> {{ average_rating }}</p>
+
     </div>
 </body>
 </html>
