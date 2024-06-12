@@ -58,7 +58,7 @@ def getFilmRating(session, tconst):
 
 session = Session(engine)
 
-films_ratings = session.query(TitleBasics).join(TitleRatings, TitleBasics.tconst == TitleRatings.tconst).with_entities(TitleBasics.tconst, TitleRatings.numVotes).all()
+films_ratings = session.query(TitleBasics).join(TitleRatings, TitleBasics.tconst == TitleRatings.tconst).with_entities(TitleBasics.primaryTitle, TitleRatings.numVotes).all()
 
 elements = []
 probabilities = []
@@ -70,11 +70,11 @@ for x in tqdm(films_ratings):
 
 print('[*] computing films probabilities...')
 for x in tqdm(films_ratings):
-    elements.append(x.tconst)
+    elements.append(x.primaryTitle)
     probabilities.append(int(x.numVotes) / count)
 
 print("[*] sampling a film list...")
-with open('film_list.txt', 'w') as f:
+with open('../data/film_list.csv', 'w') as f:
     for film in tqdm(np.random.choice(elements, NUM_ELEMENTS, p=probabilities)):
-        f.write(film + '\n')
+        f.write(f'{film}\n')
 

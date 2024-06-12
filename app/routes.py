@@ -1,18 +1,17 @@
-from flask import render_template, redirect
+from flask import render_template, redirect, request
 from app import app
-from app.forms import SearchForm
 from app.models import *
 
 @app.route('/')
 @app.route('/index', methods=['GET', 'POST'])
 def index():
 
-    form = SearchForm()
-    if form.validate_on_submit():
-        film = form.title.data
+    if request.method == 'POST':
+        form = request.form
+        film = form.get('title')
         return redirect("/index/"+film)
-
-    return render_template('index.html', title='Home', form=form)
+    else:
+        return render_template('index.html', title='Home')
 
 
 @app.route('/index/<_title>')
