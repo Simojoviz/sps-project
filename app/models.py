@@ -121,39 +121,67 @@ def getFilmByTitle(title):
     film = TitleBasics.query.filter_by(primaryTitle=title).first()
     return film
 
+
 def getFilmById(tconst):
     film = TitleBasics.query.filter_by(tconst=tconst).first()
     return film
+
 
 def getAkasByFilmId(tconst):
     aka = TitleAkas.query.filter_by(titleId=tconst).all()
     return aka
 
+
 def getCrewByFilmId(tconst):
     crew = TitleCrew.query.filter_by(tconst=tconst).first()
     return crew
+
 
 def getFilmRating(tconst):
     rating = TitleRatings.query.filter_by(tconst=tconst).first()
     return rating
 
+
 def getActorsByFilmId(tconst):
-    principals = TitlePrincipals.query.filter((TitlePrincipals.tconst==tconst) 
-                                         & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()
-    actors = set([getPersonById(p.nconst) for p in principals])
+    #principals = TitlePrincipals.query.filter((TitlePrincipals.tconst==tconst) 
+    #                                     & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()
+    #actors = set([getPersonById(p.nconst) for p in principals])
+    actors = TitlePrincipals.query.filter((TitlePrincipals.tconst==tconst) & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))) \
+                                  .join(NameBasics, TitlePrincipals.nconst == NameBasics.nconst).with_entities(NameBasics) \
+                                  .all()
     return actors
+    
+
+def getWritersByFilmId(tconst):
+    writers = TitlePrincipals.query.filter((TitlePrincipals.tconst==tconst) & (TitlePrincipals.category == 'writer') ) \
+                                  .join(NameBasics, TitlePrincipals.nconst == NameBasics.nconst).with_entities(NameBasics) \
+                                  .all()
+    return writers
+
+
+def getDirectorsByFilmId(tconst):
+    directors = TitlePrincipals.query.filter((TitlePrincipals.tconst==tconst) & (TitlePrincipals.category == 'director') ) \
+                                  .join(NameBasics, TitlePrincipals.nconst == NameBasics.nconst).with_entities(NameBasics) \
+                                  .all()
+    return directors
+
 
 def getPersonById(nconst):
     person = NameBasics.query.filter_by(nconst=nconst).first()
     return person
 
+
 def getPersonByName(name):
     person = NameBasics.query.filter_by(primaryName=name).first()
     return person
 
+
 def getFilmsByActor(nconst):
-    films = set([getFilmById(p.tconst) for p in TitlePrincipals.query.filter((TitlePrincipals.nconst==nconst) 
-                                         & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()])
+    #films = set([getFilmById(p.tconst) for p in TitlePrincipals.query.filter((TitlePrincipals.nconst==nconst) 
+    #                                     & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()])
+    films = TitlePrincipals.query.filter((TitlePrincipals.nconst==nconst) & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))) \
+                         .join(TitleBasics, TitlePrincipals.tconst == TitleBasics.tconst).with_entities(TitleBasics.tconst, TitleBasics.primaryTitle) \
+                         .all()
     return films
 
 
