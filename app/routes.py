@@ -5,7 +5,9 @@ import time
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-LOG_FILE = f'{basedir}/../data/log_db_time_25.csv'
+LOG_FILE = f'{basedir}/../data/log_db_time_1.csv'
+open(LOG_FILE, 'w').close()
+
 
 count = 1
 
