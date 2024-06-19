@@ -1,4 +1,5 @@
 from app import db
+import time
 
 class TitleAkas(db.Model):
     
@@ -142,6 +143,12 @@ def getActorsByFilmId(tconst):
                                          & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()
     actors = set([getPersonById(p.nconst) for p in principals])
     return actors
+
+def getCrewPersonById(nconst):
+    start_time = time.time()
+    person = NameBasics.query.filter_by(nconst=nconst).first()
+    end_time = time.time()
+    return person, end_time-start_time
 
 def getPersonById(nconst):
     person = NameBasics.query.filter_by(nconst=nconst).first()
