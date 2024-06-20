@@ -76,5 +76,7 @@ for x in tqdm(films_ratings):
 print("[*] sampling a film list...")
 with open('../data/film_list.csv', 'w') as f:
     for film in tqdm(np.random.choice(elements, NUM_ELEMENTS, p=probabilities)):
+        while '/' in film:
+            film = np.random.choice(elements, 1, p=probabilities)
         f.write(f'{film}\n')
 

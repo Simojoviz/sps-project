@@ -28,13 +28,19 @@ with open(f'../data/parsed_jmeter_result_table_{sys.argv[1]}.csv', 'r') as jmete
     log = zip(jmeter_log_fixed, db_log)
 
     count = 0
+    home = 0
     tot_server = 0
     tot_db = 0
     for x in log:
+        if '/index' not in x[0].split(',')[1] and '/actor' not in x[0].split(',')[1]:
+            home += 1
+            print(x[0].split(',')[1])
         count += 1
         tot_server += (int(x[0].split(',')[0]) / 1000) - float(x[1].split(',')[1])
         tot_db += float(x[1].split(',')[1])
-        print(round((int(x[0].split(',')[0]) / 1000) - float(x[1].split(',')[1]), 3), x[1].split(',')[2], end='')
+        #print(round((int(x[0].split(',')[0]) / 1000) - float(x[1].split(',')[1]), 3), x[1].split(',')[2], end='')
 
     print('Average response time server: ', round(tot_server/count, 3))
-    print('Average response time db: ', round(tot_db/count, 3))
+    print('Average response time db: ', round(tot_db/(count - home), 3))
+    print(home)
+    print(count)

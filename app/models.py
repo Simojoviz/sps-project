@@ -140,7 +140,7 @@ def getFilmRating(tconst):
 
 def getActorsByFilmId(tconst):
     principals = TitlePrincipals.query.filter((TitlePrincipals.tconst==tconst) 
-                                         & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()
+                                         & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).limit(10).all()
     actors = set([getPersonById(p.nconst) for p in principals])
     return actors
 
@@ -160,7 +160,7 @@ def getPersonByName(name):
 
 def getFilmsByActor(nconst):
     films = set([getFilmById(p.tconst) for p in TitlePrincipals.query.filter((TitlePrincipals.nconst==nconst) 
-                                         & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).all()])
+                                         & ((TitlePrincipals.category == 'actor') | (TitlePrincipals.category == 'actress'))).limit(10).all()])
     return films
 
 
